@@ -43,3 +43,7 @@ env_logger = "0.10"
 [features]
 default = ["serde"]
 serde = ["dep:serde", "egui/serde"]
+
+[patch.crates-io]
+eframe = { git = "https://github.com/emilk/egui.git", rev = "39271c3adfad1e755ed546ee1f5cc1fb41d16af1" } # egui master 2023-11-20
+egui = { git = "https://github.com/emilk/egui.git", rev = "39271c3adfad1e755ed546ee1f5cc1fb41d16af1" }   # egui master 2023-11-20

@@ -5,7 +5,7 @@ use eframe::egui;
 fn main() -> Result<(), eframe::Error> {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
-        initial_window_size: Some(egui::vec2(800.0, 600.0)),
+        viewport: egui::ViewportBuilder::default().with_inner_size([800.0, 600.0]),
         ..Default::default()
     };
     eframe::run_native(
@@ -223,7 +223,11 @@ impl eframe::App for MyApp {
             ui.separator();
 
             if let Some(root) = self.tree.root() {
-                tree_ui(ui, &mut self.behavior, &mut self.tree.tiles, root);
+                egui::ScrollArea::vertical()
+                    .auto_shrink(false)
+                    .show(ui, |ui| {
+                        tree_ui(ui, &mut self.behavior, &mut self.tree.tiles, root);
+                    });
             }
 
             if let Some(parent) = self.behavior.add_child_to.take() {
