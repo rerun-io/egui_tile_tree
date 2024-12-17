@@ -461,6 +461,28 @@ impl<Pane> Tiles<Pane> {
                         }
                     }
                 }
+
+                if options.flatten_tabs_in_tabs {
+                    let mut found = false;
+                    let mut new_children = Vec::new();
+
+                    for &child_id in container.children() {
+                        if let Some(Tile::Container(Container::Tabs(child_tabs))) =
+                            self.get(child_id)
+                        {
+                            new_children.extend(child_tabs.children.iter().copied());
+                            found = true;
+                        } else {
+                            new_children.push(child_id);
+                        }
+                    }
+
+                    if found {
+                        let new_container =
+                            self.insert_new(Tile::Container(Container::new_tabs(new_children)));
+                        return SimplifyAction::Replace(new_container);
+                    }
+                }
             } else {
                 if options.join_nested_linear_containers {
                     if let Container::Linear(parent) = container {
